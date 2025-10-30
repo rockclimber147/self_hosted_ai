@@ -57,3 +57,8 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+
+### 6. Run the server
+```bash
+uvicorn main:app --reload
+```
