@@ -62,3 +62,9 @@ pip install -r requirements.txt
 ```bash
 uvicorn main:app --reload
 ```
+
+## Adding a dependency
+```bash
+pip install [dependency]
+pip freeze > requirements.txt
+```
