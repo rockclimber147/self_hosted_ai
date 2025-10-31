@@ -15,40 +15,45 @@
 
   <div id="summary"></div>
 
-  <script>
-    const uploadBtn = document.getElementById('uploadBtn');
-    const videoFileInput = document.getElementById('videoFile');
-    const summaryDiv = document.getElementById('summary');
+<script>
+  const uploadBtn = document.getElementById('uploadBtn');
+  const videoFileInput = document.getElementById('videoFile');
+  const summaryDiv = document.getElementById('summary');
 
-    uploadBtn.addEventListener('click', () => {
-      const file = videoFileInput.files[0];
-      if (!file) {
-        alert('Please select a video file first!');
-        return;
-      }
+  uploadBtn.addEventListener('click', () => {
+    const file = videoFileInput.files[0];
+    if (!file) {
+      alert('Please select a video file first!');
+      return;
+    }
 
-      const formData = new FormData();
-      formData.append('file', file);
+    summaryDiv.textContent = "Processing...";
 
-      summaryDiv.textContent = "Processing...";
+    const formData = new FormData();
+    formData.append('file', file); // Must match FastAPI parameter name
 
-      fetch('http://127.0.0.1:8000/ai/summarize/', {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Server error: ' + response.status);
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://127.0.0.1:8000/ai/summarize/', true);
+
+    xhr.onload = function() {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          const data = JSON.parse(xhr.responseText);
+          summaryDiv.textContent = data.summary || "No summary returned.";
+        } catch (err) {
+          summaryDiv.textContent = 'Error parsing response: ' + err.message;
         }
-        return response.json();
-      })
-      .then(data => {
-        summaryDiv.textContent = data.summary || "No summary returned.";
-      })
-      .catch(err => {
-        summaryDiv.textContent = 'Error: ' + err.message;
-      });
-    });
-  </script>
+      } else {
+        summaryDiv.textContent = 'Server error: ' + xhr.status + ' ' + xhr.statusText;
+      }
+    };
+
+    xhr.onerror = function() {
+      summaryDiv.textContent = 'Network error or CORS issue.';
+    };
+
+    xhr.send(formData);
+  });
+</script>
 </body>
 </html>
