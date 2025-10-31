@@ -21,7 +21,7 @@ messages = [
         "role": "user",
         "content": [
             {"type": "video", "path": video_path},
-            {"type": "text", "text": "Summarize what happens in this video for someone with visual impairments."}
+            {"type": "text", "text": "Is there a squirrel in this video?"}
         ]
     }
 ]
