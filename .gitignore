@@ -40,3 +40,5 @@ __pypackages__/
 
 # VSCode dev container
 .devcontainer/
+
+*.mp4
