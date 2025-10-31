@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Summarizer</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #summary { margin-top: 20px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>🎥 Upload Video to Summarize</h1>
+  <input type="file" id="videoFile" accept="video/*">
+  <button id="uploadBtn">Upload & Summarize</button>
+
+  <div id="summary"></div>
+
+  <script>
+    const uploadBtn = document.getElementById('uploadBtn');
+    const videoFileInput = document.getElementById('videoFile');
+    const summaryDiv = document.getElementById('summary');
+
+    uploadBtn.addEventListener('click', () => {
+      const file = videoFileInput.files[0];
+      if (!file) {
+        alert('Please select a video file first!');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      summaryDiv.textContent = "Processing...";
+
+      fetch('http://127.0.0.1:8000/ai/summarize/', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Server error: ' + response.status);
+        }
+        return response.json();
+      })
+      .then(data => {
+        summaryDiv.textContent = data.summary || "No summary returned.";
+      })
+      .catch(err => {
+        summaryDiv.textContent = 'Error: ' + err.message;
+      });
+    });
+  </script>
+</body>
+</html>
