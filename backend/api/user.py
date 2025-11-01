@@ -1,8 +1,9 @@
-from fastapi import APIRouter, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Response
 from auth.security import hash_password, verify_password
 from auth.jwt_handler import create_jwt
+from auth.dependencies import get_current_user
 from models.user import UserCreate, UserLogin, UserRead
-from db.user import insert_user, get_user_by_email
+from db.user import get_user_by_id, insert_user, get_user_by_email
 
 router = APIRouter(prefix="/user", tags=["user"])
 
@@ -11,18 +12,34 @@ router = APIRouter(prefix="/user", tags=["user"])
 def test():
     return {"message": "user route works"}
 
+@router.get("/get_user_info")
+def get_user_info(user_id: int = Depends(get_current_user)):
+    user = get_user_by_id(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return UserRead(
+        id=user[0],
+        email=user[1],
+        api_requests_left=user[2],
+    )
+
 
 @router.post("/create", response_model=UserRead)
-def create_user(user: UserCreate):
+def create_user(user: UserCreate, response: Response):
     hashed_pw = hash_password(user.password)
     new_user = insert_user(user.email, hashed_pw)
     if not new_user:
         raise HTTPException(status_code=400, detail="User already exists")
+
+    user_id = new_user[0]
+    token = create_jwt(user_id, role="user")
+    response.set_cookie(key="access_token", value=token, httponly=True)
     return UserRead(
         id=new_user[0],
         email=new_user[1],
         api_requests_left=new_user[2],
     )
+
 
 @router.post("/login")
 def login_user(user: UserLogin, response: Response):

@@ -27,3 +27,12 @@ def get_admin_by_email(email: str):
                 (email,),
             )
             return cur.fetchone()
+
+def get_admin_by_id(admin_id: int):
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT id, email FROM admin WHERE id = %s",
+                (admin_id,),
+            )
+            return cur.fetchone()
