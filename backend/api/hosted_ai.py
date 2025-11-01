@@ -22,11 +22,13 @@ async def summarize_video(request: Request, file: UploadFile = File(...), user_i
         raise HTTPException(status_code=404, detail="User not found")
     
     api_requests_left = user[2]  # api_requests_left is the third column
+    warning = None
     if api_requests_left <= 0:
-        raise HTTPException(status_code=403, detail="No API requests remaining")
-    
-    # Decrement the request count
-    update_user_api_requests_left(user_id, 1)
+        warning = "You have exceeded your free API requests. You may still use the service, but future limits may apply."
+    else:
+        # Decrement the request count only if they have remaining quota
+        update_user_api_requests_left(user_id, 1)
+
     
     # Access the model
     ai_model = request.app.state.ai_model
@@ -42,5 +44,10 @@ async def summarize_video(request: Request, file: UploadFile = File(...), user_i
 
     # Run inference
     summary = ai_model.summarize_video(str(video_path))
-    print(summary)
-    return {"summary": summary}
+
+    response = {"summary": summary}
+    if warning:
+        response["warning"] = warning
+    print("Summary: ", summary)
+    print("Response: ", response)
+    return response
