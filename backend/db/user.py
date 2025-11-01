@@ -8,7 +8,7 @@ def insert_user(email: str, hashed_password: str):
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    INSERT INTO 'user' (email, password)
+                    INSERT INTO "user" (email, password)
                     VALUES (%s, %s)
                     RETURNING id, email, api_requests_left
                     """,
