@@ -1,7 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, HTTPException, Response
 from auth.security import hash_password, verify_password
 from auth.jwt_handler import create_jwt
-from auth.dependencies import get_current_user
 from models.user import UserCreate, UserLogin, UserRead
 from db.user import insert_user, get_user_by_email
 
