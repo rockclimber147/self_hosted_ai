@@ -47,3 +47,12 @@ def update_user_api_requests_left(user_id: int, amount: int):
                 (amount, user_id),
             )
             conn.commit()
+
+
+def get_all_users():
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                'SELECT id, email, api_requests_left FROM "user" ORDER BY id'
+            )
+            return cur.fetchall()
