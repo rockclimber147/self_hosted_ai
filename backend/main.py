@@ -17,13 +17,18 @@ async def lifespan(app: FastAPI):
     print("AI model loaded!")
     yield
 
+
+
+
 app = FastAPI(lifespan=lifespan)
+
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # allow all origins for testing
     allow_methods=["*"],  # allow POST, GET, etc.
     allow_headers=["*"],  # allow custom headers
+    allow_credentials=True,  # allow cookies to be sent
 )
 
 app.include_router(admin_router)
