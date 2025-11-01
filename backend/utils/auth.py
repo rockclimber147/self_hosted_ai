@@ -1,3 +1,0 @@
-## JWT Logic here
-class AuthService:
-    ...
