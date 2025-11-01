@@ -13,11 +13,6 @@ def test():
     return {"message": "user route works"}
 
 
-@router.get("/user-dashboard")
-def user_dashboard(user_id: int = Depends(get_current_user)):
-    return {"message": f"Welcome user {user_id}"}
-
-
 @router.post("/create", response_model=UserRead)
 def create_user(user: UserCreate):
     hashed_pw = hash_password(user.password)

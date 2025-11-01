@@ -14,11 +14,6 @@ def test():
     return {"message": "admin route works"}
 
 
-@router.get("/admin-dashboard")
-def admin_dashboard(admin_id: int = Depends(get_current_admin)):
-    return {"message": f"Welcome admin {admin_id}"}
-
-
 @router.post("/create", response_model=AdminRead)
 def create_admin(admin: AdminCreate):
     hashed_pw = hash_password(admin.password)
