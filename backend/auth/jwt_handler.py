@@ -14,7 +14,7 @@ JWT_EXPIRATION_MINUTES = int(os.getenv("JWT_EXPIRATION_MINUTES", 60))
 
 def create_jwt(user_id: int, role: str = "user") -> str:
     payload = {
-        "sub": user_id,
+        "sub": str(user_id),  # PyJWT requires sub to be a string
         "role": role,
         "exp": datetime.utcnow() + timedelta(minutes=JWT_EXPIRATION_MINUTES),
     }
@@ -26,7 +26,7 @@ def verify_jwt(token: str):
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         return {"success": True, "payload": payload}
-    except jwt.ExpiredSignatureError:
+    except jwt.ExpiredSignatureError as e:
         return {"success": False, "error": "Token has expired"}
-    except jwt.InvalidTokenError:
+    except jwt.InvalidTokenError as e:
         return {"success": False, "error": "Invalid token"}
