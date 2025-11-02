@@ -53,18 +53,29 @@ source venv/bin/activate
 ```
 
 ### 5. Install dependencies
-
 ```bash
 pip install -r requirements.txt
 ```
+
 
 ### 6. Run the server
 ```bash
 uvicorn main:app --reload
 ```
+### 7. Make a .env file
+```bash
+HF_HOME={ABSOLUTE PATH TO THE REPO BACKEND FOLDER HERE}\.huggingface_cache
+```
+
 
 ## Adding a dependency
 ```bash
 pip install [dependency]
 pip freeze > requirements.txt
+```
+
+### Mac errors during install dependencies
+```bash
+brew install pkg-config ffmpeg #took a long time
+pip install -r requirements.txt
 ```
