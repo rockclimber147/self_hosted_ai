@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="styles/admin_landing.css" />
+</head>
+<body>
+  <div class="container">
+    <h1 id="greeting"></h1>
+    <h2>User Activity Overview</h2>
+
+    <div id="userTableContainer">
+      <table id="userTable">
+        <thead>
+          <tr>
+            <th>User Name</th>
+            <th>API Requests</th>
+          </tr>
+        </thead>
+        <tbody id="userTableBody">
+          <tr><td colspan="2">Loading users...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <button id="logoutBtn">Logout</button>
+  </div>
+
+  <script src="scripts/admin_landing.js"></script>
+</body>
+</html>

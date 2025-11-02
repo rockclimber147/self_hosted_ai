@@ -22,10 +22,11 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+origins = ["http://127.0.0.1:5500"]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # allow all origins for testing
+    allow_origins=origins,  # allow all origins for testing
     allow_methods=["*"],  # allow POST, GET, etc.
     allow_headers=["*"],  # allow custom headers
     allow_credentials=True,  # allow cookies to be sent
