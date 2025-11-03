@@ -1,8 +1,8 @@
-import { URL } from "./config.js";
+import BACKEND_URL from "./config";
 
 async function loadUser() {
   try {
-    const response = await fetch(`${URL}/user/get_user_info`, {
+    const response = await fetch(`${BACKEND_URL}/user/get_user_info`, {
       method: "GET",
       credentials: "include"
     });
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch(`${URL}/ai/summarize/`, {
+      const response = await fetch(`${BACKEND_URL}/ai/summarize/`, {
         method: "POST",
         body: formData,
         credentials: "include"
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   document.getElementById("logoutBtn").addEventListener("click", async () => {
-    await fetch(`${URL}/user/logout`, {
+    await fetch(`${BACKEND_URL}/user/logout`, {
       method: "POST",
       credentials: "include"
     });

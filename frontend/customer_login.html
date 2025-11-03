@@ -27,15 +27,15 @@
             <div class="mb-5">
                 <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email address or Username</label>
                 <input type="text" id="email" name="email" required
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
-                  placeholder="you@example.com">
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+                    placeholder="you@example.com">
             </div>
 
             <div class="mb-6">
                 <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
                 <input type="password" id="password" name="password" required
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
-                  placeholder="••••••••">
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+                    placeholder="••••••••">
             </div>
 
             <div class="flex justify-end mb-6">
@@ -56,87 +56,16 @@
                 here
             </a>
         </p>
+        <p class="text-center text-sm text-gray-500 mt-6">
+            Don't have an account?
+            <a href="./register_customer.html" class="font-medium text-blue-600 hover:text-blue-700 transition duration-150">
+                Register here
+            </a>
+        </p>
 
     </div>
 
-    <script>
-    const showMessage = (message, type) => {
-        const msgBox = document.getElementById('message-box');
-        let color, background;
-        if (type === 'success') {
-            color = 'text-green-800';
-            background = 'bg-green-100';
-        } else if (type === 'error') {
-            color = 'text-red-800';
-            background = 'bg-red-100';
-        }
-
-        msgBox.className = `p-3 mb-4 rounded-lg text-sm transition-all duration-300 ${color} ${background}`;
-        msgBox.textContent = message;
-        msgBox.classList.remove('hidden');
-
-        setTimeout(() => {
-            msgBox.classList.add('hidden');
-        }, 5000);
-    };
-
-    document.getElementById('login-form').addEventListener('submit', async function(event) {
-        event.preventDefault();
-
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const apiUrl = 'http://127.0.0.1:8000/user/login';
-
-        if (!email || !password) {
-            showMessage('Please enter both email and password.', 'error');
-            return;
-        }
-
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    email: email,
-                    password: password
-                })
-            });
-
-            if (response.ok) {
-                showMessage('Login successful! Redirecting...', 'success');
-                
-                setTimeout(() => {
-                    window.location.href = 'customer_landing.html'; 
-                }, 1000); 
-
-            } else {
-                let errorDetail = `Login failed. Status: ${response.status}.`;
-                try {
-                    const errorData = await response.json();
-                    errorDetail = errorData.detail || `Server status: ${response.status}`; 
-                } catch (e) {
-                    errorDetail += ' Failed to read server error details.';
-                }
-                
-                showMessage(`Login failed: ${errorDetail}`, 'error');
-            }
-
-        } catch (error) {
-            console.error('Fetch error:', error);
-            
-            let displayError = 'Could not connect to the API server.';
-            
-            if (window.location.protocol === 'https:' && apiUrl.startsWith('http:')) {
-                displayError = 'BLOCKED: Mixed Content. The secure HTTPS page cannot load the HTTP API.';
-            }
-            
-            showMessage(displayError, 'error');
-        }
-    });
-  </script>
+    <script src="scripts/customer_login.js"></script>
 
 </body>
 </html>

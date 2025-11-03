@@ -1,10 +1,10 @@
-import { URL } from "./config.js";
+import BACKEND_URL from "./config";
 
 document.getElementById("greeting").textContent = "Admin Dashboard";
 
 async function loadUsers() {
   try {
-    const response = await fetch(`${URL}/admin/users`, {
+    const response = await fetch(`${BACKEND_URL}/admin/users`, {
       method: "GET",
       credentials: "include"
     });
@@ -38,7 +38,7 @@ async function loadUsers() {
 loadUsers();
 
 document.getElementById("logoutBtn").addEventListener("click", async () => {
-    await fetch(`${URL}/admin/logout`, {
+    await fetch(`${BACKEND_URL}/admin/logout`, {
       method: "POST",
       credentials: "include"
     });
