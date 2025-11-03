@@ -53,7 +53,7 @@ def login_admin(admin: AdminLogin, response: Response):
 
     admin_id = row[0]
     token = create_jwt(admin_id, role="admin")
-    response.set_cookie(key="access_token", value=token, httponly=True)
+    response.set_cookie(key="access_token", value=token, httponly=True, secure=True, samesite="None")
     return {"message": "Logged in successfully"}
 
 

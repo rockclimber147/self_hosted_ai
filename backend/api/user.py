@@ -33,7 +33,7 @@ def create_user(user: UserCreate, response: Response):
 
     user_id = new_user[0]
     token = create_jwt(user_id, role="user")
-    response.set_cookie(key="access_token", value=token, httponly=True)
+    response.set_cookie(key="access_token", value=token, httponly=True, secure=True, samesite="None")
     return UserRead(
         id=new_user[0],
         email=new_user[1],
@@ -49,7 +49,7 @@ def login_user(user: UserLogin, response: Response):
 
     user_id = row[0]
     token = create_jwt(user_id, role="user")
-    response.set_cookie(key="access_token", value=token, httponly=True)
+    response.set_cookie(key="access_token", value=token, httponly=True, secure=True, samesite="None")
     return {"message": "Logged in successfully"}
 
 
