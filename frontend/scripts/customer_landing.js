@@ -1,7 +1,8 @@
+const BACKEND_URL = "https://ai.daylensmith.ca";
 
 async function loadUser() {
   try {
-    const response = await fetch("http://127.0.0.1:8000/user/get_user_info", {
+    const response = await fetch(`${BACKEND_URL}/user/get_user_info`, {
       method: "GET",
       credentials: "include"
     });
@@ -53,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/ai/summarize/", {
+      const response = await fetch(`${BACKEND_URL}/ai/summarize/`, {
         method: "POST",
         body: formData,
         credentials: "include"
@@ -80,7 +81,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   document.getElementById("logoutBtn").addEventListener("click", async () => {
-    await fetch("http://127.0.0.1:8000/user/logout", {
+    await fetch(`${BACKEND_URL}/user/logout`, {
       method: "POST",
       credentials: "include"
     });

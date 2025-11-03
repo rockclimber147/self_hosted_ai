@@ -1,8 +1,10 @@
+const BACKEND_URL = "https://ai.daylensmith.ca";
+
 document.getElementById("greeting").textContent = "Admin Dashboard";
 
 async function loadUsers() {
   try {
-    const response = await fetch("http://127.0.0.1:8000/admin/users", {
+    const response = await fetch(`${BACKEND_URL}/admin/users`, {
       method: "GET",
       credentials: "include"
     });
@@ -36,7 +38,7 @@ async function loadUsers() {
 loadUsers();
 
 document.getElementById("logoutBtn").addEventListener("click", async () => {
-    await fetch("http://127.0.0.1:8000/admin/logout", {
+    await fetch(`${BACKEND_URL}/admin/logout`, {
       method: "POST",
       credentials: "include"
     });

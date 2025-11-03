@@ -4,11 +4,11 @@ const showMessage = (message, type) => {
     const msgBox = document.getElementById('message-box');
     let color, background;
     if (type === 'success') {
-        color = 'text-green-300';
-        background = 'bg-green-700';
+        color = 'text-green-800';
+        background = 'bg-green-100';
     } else if (type === 'error') {
-        color = 'text-red-300';
-        background = 'bg-red-700';
+        color = 'text-red-800';
+        background = 'bg-red-100';
     }
 
     msgBox.className = `p-3 mb-4 rounded-lg text-sm transition-all duration-300 ${color} ${background}`;
@@ -25,7 +25,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    const apiUrl = `${BACKEND_URL}/admin/login`; 
+    const apiUrl = `${BACKEND_URL}/user/login`;
 
     if (!email || !password) {
         showMessage('Please enter both email and password.', 'error');
@@ -38,7 +38,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include', 
+            credentials: 'include',
             body: JSON.stringify({
                 email: email,
                 password: password
@@ -49,7 +49,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
             showMessage('Login successful! Redirecting...', 'success');
             
             setTimeout(() => {
-                window.location.href = 'admin_landing.html';
+                window.location.href = 'customer_landing.html'; 
             }, 1000); 
 
         } else {
