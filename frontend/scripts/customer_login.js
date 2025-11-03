@@ -1,4 +1,4 @@
-import BACKEND_URL from "./config";
+import { BACKEND_URL } from "./config.js";
 
 const showMessage = (message, type) => {
     const msgBox = document.getElementById('message-box');

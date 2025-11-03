@@ -1,4 +1,4 @@
-import BACKEND_URL from "./config";
+import { BACKEND_URL } from "./config.js";
 
 document.getElementById("greeting").textContent = "Admin Dashboard";
 
