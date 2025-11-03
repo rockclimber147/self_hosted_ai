@@ -9,10 +9,10 @@ async function loadUsers() {
       credentials: "include"
     });
 
-    // if (response.status === 401) {
-    //   window.location.href = "admin_login.html";
-    //   return;
-    // }
+    if (response.status === 401) {
+      window.location.href = "admin_login.html";
+      return;
+    }
 
     if (!response.ok) throw new Error("Failed to fetch user list");
     const users = await response.json();
