@@ -19,11 +19,11 @@
       <div class="upload-section">
         <p>Select a video file (MP4) and get a generated summary.</p><br>
 
-        <form id="uploadForm">
+        <div id="uploadForm">
           <h3>Upload Video:</h3>
-          <input type="file" id="videoFile" accept="video/mp4" required />
-          <button type="submit" id="uploadBtn">Upload & Summarize</button>
-        </form>
+          <input type="file" id="videoFile" accept="video/mp4" />
+          <button type="button" id="uploadBtn">Upload & Summarize</button>
+        </div>
 
         <div id="loading" class="hidden">Summarizing your video...</div>
 

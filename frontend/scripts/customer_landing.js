@@ -28,15 +28,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   const apiCount = document.getElementById("apiCount");
   apiCount.textContent = user.api_requests_left;
 
-  const uploadForm = document.getElementById("uploadForm");
+  const uploadBtn = document.getElementById("uploadBtn");
   const loadingDiv = document.getElementById("loading");
   const resultDiv = document.getElementById("result");
   const summaryText = document.getElementById("summaryText");
   const errorDiv = document.getElementById("error");
   const responseText = document.getElementById("responseText");
 
-  uploadForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
+  uploadBtn.addEventListener("click", async () => {
+    console.log("clicked");
     const fileInput = document.getElementById("videoFile");
     const file = fileInput.files[0];
 
@@ -53,13 +53,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/ai/summarize", {
+      const response = await fetch("http://127.0.0.1:8000/ai/summarize/", {
         method: "POST",
         body: formData,
         credentials: "include"
       });
 
-      if (!response.ok) throw new Error(`Server error: ${response.status}`);
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Server error: ${response.status} - ${text}`);
+      }
       const data = await response.json();
 
       loadingDiv.classList.add("hidden");
