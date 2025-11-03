@@ -1,0 +1,56 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7f9fc;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 3rem auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  h1 {
+    color: #333;
+  }
+  
+  h2 {
+    margin-top: 2rem;
+    color: #555;
+  }
+  
+  #userTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+  
+  #userTable th, #userTable td {
+    border: 1px solid #ddd;
+    padding: 10px;
+  }
+  
+  #userTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  #userTable tr:nth-child(even) {
+    background-color: #fafafa;
+  }
+
+  #logoutBtn {
+    margin-top: 4rem;
+    padding: 0.8rem;
+    color: #ef6262;
+    /* background-color: white; */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
