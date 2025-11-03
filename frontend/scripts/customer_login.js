@@ -1,4 +1,4 @@
-const BACKEND_URL = "https://ai.daylensmith.ca";
+import BACKEND_URL from "./config";
 
 const showMessage = (message, type) => {
     const msgBox = document.getElementById('message-box');

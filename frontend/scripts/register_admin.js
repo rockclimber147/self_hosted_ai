@@ -1,4 +1,4 @@
-const BACKEND_URL = "https://ai.daylensmith.ca";
+import BACKEND_URL from "./config";
 
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById('registrationForm');
