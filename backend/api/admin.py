@@ -37,7 +37,7 @@ def create_admin(admin: AdminCreate, response: Response):
 
     admin_id = new_admin[0]
     token = create_jwt(admin_id, role="admin")
-    response.set_cookie(key="access_token", value=token, httponly=True)
+    response.set_cookie(key="access_token", value=token, httponly=True, secure=True, samesite="None")
 
     return AdminRead(
         id=new_admin[0],
