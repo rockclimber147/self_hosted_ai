@@ -4,7 +4,7 @@ async function loadUser() {
   try {
     const response = await fetch(`${BACKEND_URL}/user/get_user_info`, {
       method: "GET",
-      credentials: "include"
+      credentials: "include",
     });
 
     if (response.status === 401) {
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const response = await fetch(`${BACKEND_URL}/ai/summarize/`, {
         method: "POST",
         body: formData,
-        credentials: "include"
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       summaryText.textContent = data.summary || "No summary generated.";
       responseText.textContent = JSON.stringify(data, null, 2);
 
-      let count = parseInt(apiCount.textContent) + 1;
+      let count = parseInt(apiCount.textContent);
       apiCount.textContent = count;
     } catch (err) {
       loadingDiv.classList.add("hidden");
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("logoutBtn").addEventListener("click", async () => {
     await fetch(`${BACKEND_URL}/user/logout`, {
       method: "POST",
-      credentials: "include"
+      credentials: "include",
     });
     window.location.href = "customer_login.html";
   });
