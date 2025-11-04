@@ -16,6 +16,7 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 def test():
     return {"message": "admin route works"}
 
+
 @router.get("/get_admin_info")
 def get_admin_info(admin_id: int = Depends(get_current_admin)):
     admin = get_admin_by_id(admin_id)
@@ -27,7 +28,10 @@ def get_admin_info(admin_id: int = Depends(get_current_admin)):
     )
 
 
-@router.post("/create", response_model=AdminRead, )
+@router.post(
+    "/create",
+    response_model=AdminRead,
+)
 def create_admin(admin: AdminCreate, response: Response):
     hashed_pw = hash_password(admin.password)
     new_admin = insert_admin(admin.email, hashed_pw)
@@ -37,7 +41,9 @@ def create_admin(admin: AdminCreate, response: Response):
 
     admin_id = new_admin[0]
     token = create_jwt(admin_id, role="admin")
-    response.set_cookie(key="access_token", value=token, httponly=True, secure=True, samesite="None")
+    response.set_cookie(
+        key="access_token", value=token, httponly=True, secure=True, samesite="None"
+    )
 
     return AdminRead(
         id=new_admin[0],
@@ -53,13 +59,17 @@ def login_admin(admin: AdminLogin, response: Response):
 
     admin_id = row[0]
     token = create_jwt(admin_id, role="admin")
-    response.set_cookie(key="access_token", value=token, httponly=True, secure=True, samesite="None")
+    response.set_cookie(
+        key="access_token", value=token, httponly=True, secure=True, samesite="None"
+    )
     return {"message": "Logged in successfully"}
 
 
 @router.post("/logout")
 def logout_admin(response: Response):
-    response.delete_cookie("access_token")
+    response.delete_cookie(
+        key="access_token", httponly=True, secure=True, samesite="None"
+    )
     return {"message": "Logged out successfully"}
 
 

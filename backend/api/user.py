@@ -12,6 +12,7 @@ router = APIRouter(prefix="/user", tags=["user"])
 def test():
     return {"message": "user route works"}
 
+
 @router.get("/get_user_info")
 def get_user_info(user_id: int = Depends(get_current_user)):
     user = get_user_by_id(user_id)
@@ -33,7 +34,9 @@ def create_user(user: UserCreate, response: Response):
 
     user_id = new_user[0]
     token = create_jwt(user_id, role="user")
-    response.set_cookie(key="access_token", value=token, httponly=True, secure=True, samesite="None")
+    response.set_cookie(
+        key="access_token", value=token, httponly=True, secure=True, samesite="None"
+    )
     return UserRead(
         id=new_user[0],
         email=new_user[1],
@@ -49,11 +52,15 @@ def login_user(user: UserLogin, response: Response):
 
     user_id = row[0]
     token = create_jwt(user_id, role="user")
-    response.set_cookie(key="access_token", value=token, httponly=True, secure=True, samesite="None")
+    response.set_cookie(
+        key="access_token", value=token, httponly=True, secure=True, samesite="None"
+    )
     return {"message": "Logged in successfully"}
 
 
 @router.post("/logout")
 def logout_user(response: Response):
-    response.delete_cookie("access_token")
+    response.delete_cookie(
+        key="access_token", httponly=True, secure=True, samesite="None"
+    )
     return {"message": "Logged out successfully"}
