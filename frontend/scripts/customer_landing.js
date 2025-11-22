@@ -41,6 +41,8 @@ function loadStaticText() {
 
 document.addEventListener("DOMContentLoaded", async () => {
   loadStaticText();
+  const loadingDiv = document.getElementById("loading");
+  loadingDiv.classList.add("hidden");
 
   const user = await loadUser();
   const email = document.getElementById("email");
@@ -50,7 +52,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   apiCount.textContent = user.api_requests_left;
 
   const uploadBtn = document.getElementById("uploadBtn");
-  const loadingDiv = document.getElementById("loading");
   const resultDiv = document.getElementById("result");
   const summaryText = document.getElementById("summaryText");
   const errorDiv = document.getElementById("error");
