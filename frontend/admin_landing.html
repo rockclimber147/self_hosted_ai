@@ -3,28 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard</title>
+  <title></title>
   <link rel="stylesheet" href="styles/admin_landing.css" />
 </head>
 <body>
   <div class="container">
     <h1 id="greeting"></h1>
-    <h2>User Activity Overview</h2>
-
+    <h2 id="userOverviewHeader"></h2>
     <div id="userTableContainer">
       <table id="userTable">
         <thead>
           <tr>
-            <th>User Name</th>
-            <th>Remaining API Requests</th>
+            <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody id="userTableBody">
-          <tr><td colspan="2">Loading users...</td></tr>
+          <tr><td colspan="2"></td></tr>
         </tbody>
       </table>
     </div>
-    <button id="logoutBtn">Logout</button>
+    <h2 id="endpointHeading"></h2>
+    <div id="endpointTableContainer">
+      <table id="endpointTable">
+        <thead>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="endpointTableBody">
+          <tr><td colspan="3">Loading endpoints...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <button id="logoutBtn"></button>
   </div>
 
   <script type="module" src="scripts/admin_landing.js"></script>
