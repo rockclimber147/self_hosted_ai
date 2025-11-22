@@ -1,4 +1,7 @@
 import { BACKEND_URL } from "./config.js";
+import {DOM_MESSAGES} from "../lang/en/messages.js"
+
+const t = DOM_MESSAGES.customerLanding;
 
 async function loadUser() {
   try {
@@ -12,7 +15,7 @@ async function loadUser() {
       return;
     }
 
-    if (!response.ok) throw new Error("Failed to fetch user list");
+    if (!response.ok) throw new Error(t.errorLoadUser);
     const user = await response.json();
     console.log(user);
     return user;
@@ -21,7 +24,24 @@ async function loadUser() {
   }
 }
 
+function loadStaticText() {
+  document.title = t.title;
+  document.getElementById("h1").textContent = t.h1;
+  document.getElementById("labelUser").textContent = t.user;
+  document.getElementById("labelApiLeft").textContent = t.apiRequestLeft;
+  document.getElementById("uploadDescription").textContent = t.uploadDescription;
+  document.getElementById("uploadLabel").textContent = t.uploadLabel;
+  document.getElementById("uploadBtn").textContent = t.uploadButton;
+  document.getElementById("loading").textContent = t.loading;
+  document.getElementById("h3Summary").textContent = t.h3Summary;
+  document.getElementById("h3AIResponse").textContent = t.h3AIResponse;
+  document.getElementById("responseText").textContent = t.defaultResponse;
+  document.getElementById("logoutBtn").textContent = t.logoutButton;
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
+  loadStaticText();
+
   const user = await loadUser();
   const email = document.getElementById("email");
   email.textContent = user.email;
@@ -42,7 +62,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const file = fileInput.files[0];
 
     if (!file) {
-      alert("Please select a video file first.");
+      alert(t.alert);
       return;
     }
 
@@ -62,21 +82,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       if (!response.ok) {
         const text = await response.text();
-        throw new Error(`Server error: ${response.status} - ${text}`);
+        throw new Error(t.serverError + `${response.status} - ${text}`);
       }
       const data = await response.json();
 
       loadingDiv.classList.add("hidden");
       resultDiv.classList.remove("hidden");
-      summaryText.textContent = data.summary || "No summary generated.";
+      summaryText.textContent = data.summary || t.summaryDefault;
       responseText.textContent = JSON.stringify(data, null, 2);
 
-      let count = parseInt(apiCount.textContent);
-      apiCount.textContent = count;
+      // let count = parseInt(apiCount.textContent);
+      // apiCount.textContent = count;
     } catch (err) {
       loadingDiv.classList.add("hidden");
       errorDiv.classList.remove("hidden");
-      errorDiv.textContent = "Error uploading video: " + err.message;
+      errorDiv.textContent = t.uploadError + err.message;
     }
   });
 
