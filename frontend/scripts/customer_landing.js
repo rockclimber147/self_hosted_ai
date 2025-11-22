@@ -67,6 +67,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
+    if (!file.name.toLowerCase().endsWith(".mp4")) {
+      alert(t.invalidFormat);
+      return;
+    }
+
+    if (file.type !== "video/mp4") {
+      alert(t.invalidMime);
+      return;
+    }
+
+    const MAX_SIZE_MB = 5;
+    if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+      alert(
+        (t.fileTooLarge) + MAX_SIZE_MB + "MB"
+      );
+      return;
+    }
+
     loadingDiv.classList.remove("hidden");
     resultDiv.classList.add("hidden");
     errorDiv.classList.add("hidden");
