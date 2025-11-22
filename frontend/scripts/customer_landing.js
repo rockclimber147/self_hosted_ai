@@ -33,7 +33,6 @@ function loadStaticText() {
   document.getElementById("uploadLabel").textContent = t.uploadLabel;
   document.getElementById("uploadBtn").textContent = t.uploadButton;
   document.getElementById("loading").textContent = t.loading;
-  document.getElementById("h3Summary").textContent = t.h3Summary;
   document.getElementById("h3AIResponse").textContent = t.h3AIResponse;
   document.getElementById("responseText").textContent = t.defaultResponse;
   document.getElementById("logoutBtn").textContent = t.logoutButton;
@@ -52,8 +51,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   apiCount.textContent = user.api_requests_left;
 
   const uploadBtn = document.getElementById("uploadBtn");
-  const resultDiv = document.getElementById("result");
-  const summaryText = document.getElementById("summaryText");
   const errorDiv = document.getElementById("error");
   const responseText = document.getElementById("responseText");
 
@@ -86,7 +83,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     loadingDiv.classList.remove("hidden");
-    resultDiv.classList.add("hidden");
     errorDiv.classList.add("hidden");
 
     const formData = new FormData();
@@ -106,9 +102,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       const data = await response.json();
 
       loadingDiv.classList.add("hidden");
-      resultDiv.classList.remove("hidden");
-      summaryText.textContent = data.summary || t.summaryDefault;
-      responseText.textContent = JSON.stringify(data, null, 2);
+      if (data.warning) alert(data.warning);
+      responseText.textContent = JSON.stringify(data.summary, null, 2);
 
       const updatedUser = await loadUser();
       if (updatedUser) apiCount.textContent = updatedUser.api_requests_left;
