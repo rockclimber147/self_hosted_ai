@@ -20,6 +20,13 @@ export const DOM_MESSAGES = {
         "fileTooLarge": "File too large. Max size: "
     },
     "adminLanding": {
-
+        "title": "Admin Dashboard",
+        "h2": "User Activity Overview",
+        "colUserName": "User Name",
+        "colRemainingApiRequests": "Remaining API Requests",
+        "loading": "Loading users...",
+        "logoutButton": "Logout",
+        "fetchError": "Failed to fetch user list",
+        "loadingError": "Error loading users"
     },
 }
