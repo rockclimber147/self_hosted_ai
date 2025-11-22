@@ -110,8 +110,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       summaryText.textContent = data.summary || t.summaryDefault;
       responseText.textContent = JSON.stringify(data, null, 2);
 
-      // let count = parseInt(apiCount.textContent);
-      // apiCount.textContent = count;
+      const updatedUser = await loadUser();
+      if (updatedUser) apiCount.textContent = updatedUser.api_requests_left;
     } catch (err) {
       loadingDiv.classList.add("hidden");
       errorDiv.classList.remove("hidden");
