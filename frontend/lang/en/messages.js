@@ -27,6 +27,13 @@ export const DOM_MESSAGES = {
         "loading": "Loading users...",
         "logoutButton": "Logout",
         "fetchError": "Failed to fetch user list",
-        "loadingError": "Error loading users"
+        "h2Endpoint": "API Stats Overview",
+        "loadingError": "Error loading endpoints",
+        "endpointError": "No endpoints found",
+        "loadingEndpoint": "Loading endpoints...",
+        "colMethod": "Method",
+        "colEndpoint": "Endpoint",
+        "colEndpointRequests": "Request Count",
+        "logoutFailed": "Logout failed:"
     },
 }

@@ -24,23 +24,23 @@ body {
     color: #555;
   }
   
-  #userTable {
+  #userTable, #endpointTable {
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
   }
   
-  #userTable th, #userTable td {
+  #userTable th, #userTable td, #endpointTable th, #endpointTable td {
     border: 1px solid #ddd;
     padding: 10px;
   }
   
-  #userTable th {
+  #userTable th, #endpointTable th {
     background-color: #f2f2f2;
     font-weight: bold;
   }
   
-  #userTable tr:nth-child(even) {
+  #userTable tr:nth-child(even), #endpointTable tr:nth-child(even) {
     background-color: #fafafa;
   }
 

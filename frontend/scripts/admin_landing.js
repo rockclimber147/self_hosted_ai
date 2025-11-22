@@ -43,10 +43,65 @@ async function loadUsers() {
   }
 }
 
+async function loadEndpoints() {
+  const tableBody = document.getElementById("endpointTableBody");
+  tableBody.innerHTML = `<tr><td colspan="3">${t.loadingEndpoint}</td></tr>`;
+
+  try {
+    // const response = await fetch(`${BACKEND_URL}/admin/endpoints`, {
+    //   method: "GET",
+    //   credentials: "include",
+    // });
+    const response = [  // TODO: remove mock data and handle 404
+        { "method": "GET", "endpoint": "/user/get_user_info", "requests": 120 },
+        { "method": "POST", "endpoint": "/ai/summarize", "requests": 50 },
+        { "method": "POST", "endpoint": "/user/logout", "requests": 80 }
+      ]
+
+    if (response.status === 401) {
+      window.location.href = "admin_login.html";
+      return;
+    }
+
+    // if (!response.ok) throw new Error(t.fetchError);  // TODO: uncomment
+
+    // const endpoints = await response.json();
+    const endpoints = response; // TODO: use the line above
+    tableBody.innerHTML = "";
+
+    if (endpoints.length === 0) {
+      tableBody.innerHTML = `<tr><td colspan="3">${t.loading}: ${t.endpointError}</td></tr>`;
+      return;
+    }
+
+    endpoints.forEach(ep => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${ep.method}</td>
+        <td>${ep.endpoint}</td>
+        <td>${ep.requests}</td>
+      `;
+      tableBody.appendChild(row);
+    });
+  } catch (error) {
+    tableBody.innerHTML = `
+      <tr><td colspan="3" style="color:red;">${t.loadingError}: ${error.message}</td></tr>
+    `;
+  }
+}
+
 function loadStaticText() {
   document.title = t.title;
   document.getElementById("greeting").textContent = t.title;
   document.getElementById("userOverviewHeader").textContent = t.h2;
+  document.getElementById("endpointHeading").textContent = t.h2Endpoint;
+
+  const endpointHeaders = document.querySelectorAll("#endpointTable thead th");
+  if (endpointHeaders.length === 3) {
+    endpointHeaders[0].textContent = t.colMethod;
+    endpointHeaders[1].textContent = t.colEndpoint;
+    endpointHeaders[2].textContent = t.colEndpointRequests;
+  }
 
   const headers = document.querySelectorAll("#userTable thead th");
   if (headers.length >= 2) {
@@ -64,7 +119,7 @@ async function logout() {
       credentials: "include",
     });
   } catch (err) {
-    console.error("Logout failed:", err);
+    console.error(t.logoutFailed, err);
   } finally {
     window.location.href = "admin_login.html";
   }
@@ -73,6 +128,7 @@ async function logout() {
 document.addEventListener("DOMContentLoaded", () => {
   loadStaticText();
   loadUsers();
+  loadEndpoints();
 
   document.getElementById("logoutBtn").addEventListener("click", logout);
 });
