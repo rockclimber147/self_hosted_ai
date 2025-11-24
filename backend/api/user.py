@@ -18,11 +18,7 @@ def get_user_info(user_id: int = Depends(get_current_user)):
     user = get_user_by_id(user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    return UserRead(
-        id=user[0],
-        email=user[1],
-        api_requests_left=user[2],
-    )
+    return UserRead(**user)
 
 
 @router.post("/create", response_model=UserRead)
@@ -37,20 +33,16 @@ def create_user(user: UserCreate, response: Response):
     response.set_cookie(
         key="access_token", value=token, httponly=True, secure=True, samesite="None"
     )
-    return UserRead(
-        id=new_user[0],
-        email=new_user[1],
-        api_requests_left=new_user[2],
-    )
+    return UserRead(**new_user)
 
 
 @router.post("/login")
 def login_user(user: UserLogin, response: Response):
     row = get_user_by_email(user.email)
-    if not row or not verify_password(user.password, row[1]):
+    if not row or not verify_password(user.password, row["password"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    user_id = row[0]
+    user_id = row["id"]
     token = create_jwt(user_id, role="user")
     response.set_cookie(
         key="access_token", value=token, httponly=True, secure=True, samesite="None"

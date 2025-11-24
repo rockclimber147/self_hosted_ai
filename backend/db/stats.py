@@ -14,3 +14,14 @@ def increment_endpoint_count(endpoint: str, method: str):
                 (endpoint, method),
             )
             conn.commit()
+
+def get_endpoint_stats(endpoint: str, method: str):
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT * FROM endpoint_access
+                """,
+                (endpoint, method),
+            )
+            cur.fetchall()
