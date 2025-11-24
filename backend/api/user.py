@@ -4,8 +4,11 @@ from auth.jwt_handler import create_jwt
 from auth.dependencies import get_current_user
 from models.user import UserCreate, UserLogin, UserRead
 from db.user import get_user_by_id, insert_user, get_user_by_email
+from api.middleware import user_route_stats_dependency
 
-router = APIRouter(prefix="/user", tags=["user"])
+router = APIRouter(prefix="/user", tags=["user"], dependencies=[Depends(user_route_stats_dependency)])
+
+# router = APIRouter(prefix="/user", tags=["user"])
 
 
 @router.get("/")
