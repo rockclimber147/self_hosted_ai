@@ -8,6 +8,7 @@ from fastapi import Request
 
 from api import admin_router, user_router, ai_router
 from ai.ai_class import SmolVLM2Wrapper
+from api.middleware import count_requests_middleware
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -24,7 +25,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-
+app.middleware("http")(count_requests_middleware)
 
 @app.exception_handler(Exception)
 async def all_exceptions_handler(request: Request, exc: Exception):
