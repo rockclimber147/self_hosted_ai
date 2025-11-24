@@ -3,45 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Customer Dashboard - AI Video Summarizer</title>
+  <title></title>
   <link rel="stylesheet" href="styles/customer_landing.css" />
 </head>
 
 <body>
   <div class="container">
     <div class="header-section">
-      <h1>AI Video Summarizer</h1>
-      <p>User: <span id="email"></span></p>
-      <p>API Requests Left: <span id="apiCount">0</span></p>
+      <h1 id="h1"></h1>
+
+      <p>
+        <span id="labelUser"></span>
+        <span id="email"></span>
+      </p>
+
+      <p>
+        <span id="labelApiLeft"></span>
+        <span id="apiCount">0</span>
+      </p>
     </div>
 
     <div class="ai-section">
       <div class="upload-section">
-        <p>Select a video file (MP4) and get a generated summary.</p><br>
+        <p id="uploadDescription"></p>
+        <br>
 
         <div id="uploadForm">
-          <h3>Upload Video:</h3>
+          <h3 id="uploadLabel"></h3>
           <input type="file" id="videoFile" accept="video/mp4" />
-          <button type="button" id="uploadBtn">Upload & Summarize</button>
+          <button type="button" id="uploadBtn"></button>
         </div>
 
-        <div id="loading" class="hidden">Summarizing your video...</div>
-
-        <div id="result" class="hidden">
-          <h3>Summary</h3>
-          <pre id="summaryText"></pre>
-        </div>
+        <div id="loading" class="hidden"></div>
 
         <div id="error" class="hidden"></div>
       </div>
 
       <div class="response-box">
-        <h3>AI Response:</h3>
-        <pre id="responseText">No response yet.</pre>
+        <h3 id="h3AIResponse"></h3>
+        <pre id="responseText"></pre>
       </div>
     </div>
 
-    <button id="logoutBtn" class="logout-btn">Logout</button>
+    <button id="logoutBtn" class="logout-btn"></button>
   </div>
 
   <script type="module" src="scripts/customer_landing.js"></script>

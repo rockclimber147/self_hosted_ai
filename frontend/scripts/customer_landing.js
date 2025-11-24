@@ -1,4 +1,7 @@
 import { BACKEND_URL } from "./config.js";
+import {DOM_MESSAGES} from "../lang/en/messages.js"
+
+const t = DOM_MESSAGES.customerLanding;
 
 async function loadUser() {
   try {
@@ -12,7 +15,7 @@ async function loadUser() {
       return;
     }
 
-    if (!response.ok) throw new Error("Failed to fetch user list");
+    if (!response.ok) throw new Error(t.errorLoadUser);
     const user = await response.json();
     console.log(user);
     return user;
@@ -21,7 +24,25 @@ async function loadUser() {
   }
 }
 
+function loadStaticText() {
+  document.title = t.title;
+  document.getElementById("h1").textContent = t.h1;
+  document.getElementById("labelUser").textContent = t.user;
+  document.getElementById("labelApiLeft").textContent = t.apiRequestLeft;
+  document.getElementById("uploadDescription").textContent = t.uploadDescription;
+  document.getElementById("uploadLabel").textContent = t.uploadLabel;
+  document.getElementById("uploadBtn").textContent = t.uploadButton;
+  document.getElementById("loading").textContent = t.loading;
+  document.getElementById("h3AIResponse").textContent = t.h3AIResponse;
+  document.getElementById("responseText").textContent = t.defaultResponse;
+  document.getElementById("logoutBtn").textContent = t.logoutButton;
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
+  loadStaticText();
+  const loadingDiv = document.getElementById("loading");
+  loadingDiv.classList.add("hidden");
+
   const user = await loadUser();
   const email = document.getElementById("email");
   email.textContent = user.email;
@@ -30,9 +51,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   apiCount.textContent = user.api_requests_left;
 
   const uploadBtn = document.getElementById("uploadBtn");
-  const loadingDiv = document.getElementById("loading");
-  const resultDiv = document.getElementById("result");
-  const summaryText = document.getElementById("summaryText");
   const errorDiv = document.getElementById("error");
   const responseText = document.getElementById("responseText");
 
@@ -42,12 +60,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     const file = fileInput.files[0];
 
     if (!file) {
-      alert("Please select a video file first.");
+      alert(t.alert);
+      return;
+    }
+
+    if (!file.name.toLowerCase().endsWith(".mp4")) {
+      alert(t.invalidFormat);
+      return;
+    }
+
+    if (file.type !== "video/mp4") {
+      alert(t.invalidMime);
+      return;
+    }
+
+    const MAX_SIZE_MB = 5;
+    if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+      alert(
+        (t.fileTooLarge) + MAX_SIZE_MB + "MB"
+      );
       return;
     }
 
     loadingDiv.classList.remove("hidden");
-    resultDiv.classList.add("hidden");
     errorDiv.classList.add("hidden");
 
     const formData = new FormData();
@@ -62,21 +97,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       if (!response.ok) {
         const text = await response.text();
-        throw new Error(`Server error: ${response.status} - ${text}`);
+        throw new Error(t.serverError + `${response.status} - ${text}`);
       }
       const data = await response.json();
 
       loadingDiv.classList.add("hidden");
-      resultDiv.classList.remove("hidden");
-      summaryText.textContent = data.summary || "No summary generated.";
-      responseText.textContent = JSON.stringify(data, null, 2);
+      if (data.warning) alert(data.warning);
+      responseText.textContent = JSON.stringify(data.summary, null, 2);
 
-      let count = parseInt(apiCount.textContent);
-      apiCount.textContent = count;
+      const updatedUser = await loadUser();
+      if (updatedUser) apiCount.textContent = updatedUser.api_requests_left;
     } catch (err) {
       loadingDiv.classList.add("hidden");
       errorDiv.classList.remove("hidden");
-      errorDiv.textContent = "Error uploading video: " + err.message;
+      errorDiv.textContent = t.uploadError + err.message;
     }
   });
 
