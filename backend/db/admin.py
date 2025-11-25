@@ -11,7 +11,7 @@ def insert_admin(email: str, hashed_password: str) -> AdminAuth | None:
                     """
                     INSERT INTO admin (email, password)
                     VALUES (%s, %s)
-                    RETURNING id, email
+                    RETURNING id, email, password
                     """,
                     (email, hashed_password),
                 )

@@ -44,7 +44,7 @@ def create_admin(admin: AdminCreate, response: Response):
         key="access_token", value=token, httponly=True, secure=True, samesite="None"
     )
 
-    return AdminRead(new_admin.id, new_admin.email)
+    return AdminRead(id=new_admin.id, email=new_admin.email)
 
 
 @router.post("/login")

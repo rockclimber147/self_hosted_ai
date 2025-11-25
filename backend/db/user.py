@@ -1,11 +1,12 @@
 import psycopg
+from psycopg.rows import dict_row
 from db.connection import get_db_connection
+from models.user import UserRead, UserAuth
 
-
-def insert_user(email: str, hashed_password: str):
+def insert_user(email: str, hashed_password: str) -> UserRead | None:
     try:
         with get_db_connection() as conn:
-            with conn.cursor() as cur:
+            with conn.cursor(row_factory=dict_row) as cur:
                 cur.execute(
                     """
                     INSERT INTO "user" (email, password)
@@ -14,32 +15,38 @@ def insert_user(email: str, hashed_password: str):
                     """,
                     (email, hashed_password),
                 )
-                return cur.fetchone()
+                row = cur.fetchone()
+                if row:
+                    return UserRead(**row)
+                return None
     except psycopg.errors.UniqueViolation:
         return None
 
-
-def get_user_by_email(email: str):
+def get_user_by_email(email: str) -> UserAuth | None:
     with get_db_connection() as conn:
-        with conn.cursor() as cur:
+        with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
-                'SELECT id, password, api_requests_left FROM "user" WHERE email = %s',
+                'SELECT id, email, password, api_requests_left FROM "user" WHERE email = %s',
                 (email,),
             )
-            return cur.fetchone()
+            row = cur.fetchone()
+            if row:
+                return UserAuth(**row)
+            return None
 
-
-def get_user_by_id(user_id: int):
+def get_user_by_id(user_id: int) -> UserRead | None:
     with get_db_connection() as conn:
-        with conn.cursor() as cur:
+        with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
                 'SELECT id, email, api_requests_left FROM "user" WHERE id = %s',
                 (user_id,),
             )
-            return cur.fetchone()
+            row = cur.fetchone()
+            if row:
+                return UserRead(**row)
+            return None
 
-
-def update_user_api_requests_left(user_id: int, amount: int):
+def update_user_api_requests_left(user_id: int, amount: int) -> None:
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(
@@ -48,11 +55,11 @@ def update_user_api_requests_left(user_id: int, amount: int):
             )
             conn.commit()
 
-
-def get_all_users():
+def get_all_users() -> list[UserRead]:
     with get_db_connection() as conn:
-        with conn.cursor() as cur:
+        with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
                 'SELECT id, email, api_requests_left FROM "user" ORDER BY id'
             )
-            return cur.fetchall()
+            rows = cur.fetchall()
+            return [UserRead(**row) for row in rows]
