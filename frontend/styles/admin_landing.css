@@ -6,7 +6,7 @@ body {
   }
   
   .container {
-    max-width: 800px;
+    max-width: 1100px;
     margin: 3rem auto;
     background: white;
     padding: 2rem;
@@ -33,6 +33,10 @@ body {
   #userTable th, #userTable td, #endpointTable th, #endpointTable td {
     border: 1px solid #ddd;
     padding: 10px;
+    word-break: break-all;
+    white-space: normal;
+    max-width: 300px;
+    overflow-x: auto;
   }
   
   #userTable th, #endpointTable th {
