@@ -11,7 +11,7 @@ def insert_user(email: str, hashed_password: str) -> UserRead | None:
                     """
                     INSERT INTO "user" (email, password)
                     VALUES (%s, %s)
-                    RETURNING id, email, api_requests_left
+                    RETURNING id, email, api_requests_left, total_api_calls, last_jwt
                     """,
                     (email, hashed_password),
                 )
@@ -38,7 +38,7 @@ def get_user_by_id(user_id: int) -> UserRead | None:
     with get_db_connection() as conn:
         with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
-                'SELECT id, email, api_requests_left FROM "user" WHERE id = %s',
+                'SELECT * FROM "user" WHERE id = %s',
                 (user_id,),
             )
             row = cur.fetchone()
@@ -59,7 +59,7 @@ def get_all_users() -> list[UserRead]:
     with get_db_connection() as conn:
         with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
-                'SELECT id, email, api_requests_left FROM "user" ORDER BY id'
+                'SELECT * FROM "user" ORDER BY id'
             )
             rows = cur.fetchall()
             return [UserRead(**row) for row in rows]
