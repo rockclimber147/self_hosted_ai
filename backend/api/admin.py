@@ -6,8 +6,10 @@ from auth.security import hash_password, verify_password
 from auth.dependencies import get_current_admin
 from db.admin import get_admin_by_email, get_admin_by_id, insert_admin
 from db.user import get_all_users
-from models.admin import AdminCreate, AdminLogin, AdminRead
+from db.stats import get_endpoint_stats
+from models.admin import AdminCreate, AdminLogin, AdminRead, AdminAuth
 from models.user import UserRead
+from models.endpoint_access import EndpointStatRead
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -19,13 +21,10 @@ def test():
 
 @router.get("/get_admin_info")
 def get_admin_info(admin_id: int = Depends(get_current_admin)):
-    admin = get_admin_by_id(admin_id)
+    admin: AdminRead = get_admin_by_id(admin_id)
     if not admin:
         raise HTTPException(status_code=404, detail="Admin not found")
-    return AdminRead(
-        id=admin[0],
-        email=admin[1],
-    )
+    return admin
 
 
 @router.post(
@@ -39,25 +38,22 @@ def create_admin(admin: AdminCreate, response: Response):
     if not new_admin:
         raise HTTPException(status_code=400, detail="Admin already exists")
 
-    admin_id = new_admin[0]
+    admin_id = new_admin.id
     token = create_jwt(admin_id, role="admin")
     response.set_cookie(
         key="access_token", value=token, httponly=True, secure=True, samesite="None"
     )
 
-    return AdminRead(
-        id=new_admin[0],
-        email=new_admin[1],
-    )
+    return AdminRead(id=new_admin.id, email=new_admin.email)
 
 
 @router.post("/login")
 def login_admin(admin: AdminLogin, response: Response):
     row = get_admin_by_email(admin.email)
-    if not row or not verify_password(admin.password, row[1]):
+    if not row or not verify_password(admin.password, row.password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    admin_id = row[0]
+    admin_id = row.id
     token = create_jwt(admin_id, role="admin")
     response.set_cookie(
         key="access_token", value=token, httponly=True, secure=True, samesite="None"
@@ -77,11 +73,9 @@ def logout_admin(response: Response):
 def get_all_users_endpoint(admin_id: int = Depends(get_current_admin)):
     """Get all users and their remaining API requests (admin only)"""
     users = get_all_users()
-    return [
-        UserRead(
-            id=user[0],
-            email=user[1],
-            api_requests_left=user[2],
-        )
-        for user in users
-    ]
+    return users
+
+@router.get("/endpoint_access", response_model=List[EndpointStatRead])
+def get_all_endpoint_data(admin_id: int = Depends(get_current_admin)):
+    stats = get_endpoint_stats()
+    return stats

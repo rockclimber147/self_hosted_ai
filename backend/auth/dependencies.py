@@ -1,6 +1,6 @@
 from fastapi import Request, HTTPException
 from auth.jwt_handler import verify_jwt
-
+from db.user import increment_user_total_api_calls
 
 def get_current_user(request: Request):
     token = request.cookies.get("access_token")
@@ -11,6 +11,8 @@ def get_current_user(request: Request):
     payload = result["payload"]
     if payload.get("role") != "user":
         raise HTTPException(status_code=403, detail="Forbidden: users only")
+    user_id = int(payload["sub"])
+    increment_user_total_api_calls(user_id)
     return int(payload["sub"])  # Convert back to int since we stored it as string
 
 

@@ -1,38 +1,47 @@
 import psycopg
+from psycopg.rows import dict_row
 from db.connection import get_db_connection
+from models.admin import AdminRead, AdminAuth
 
-
-def insert_admin(email: str, hashed_password: str):
+def insert_admin(email: str, hashed_password: str) -> AdminAuth | None:
     try:
         with get_db_connection() as conn:
-            with conn.cursor() as cur:
+            with conn.cursor(row_factory=dict_row) as cur:
                 cur.execute(
                     """
                     INSERT INTO admin (email, password)
                     VALUES (%s, %s)
-                    RETURNING id, email
+                    RETURNING id, email, password
                     """,
                     (email, hashed_password),
-                ) 
-                return cur.fetchone()
+                )
+                row = cur.fetchone()
+                if row:
+                    return AdminAuth(**row)
+                return None
     except psycopg.errors.UniqueViolation:
         return None
 
-
-def get_admin_by_email(email: str):
+def get_admin_by_email(email: str) -> AdminAuth | None:
     with get_db_connection() as conn:
-        with conn.cursor() as cur:
+        with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
-                "SELECT id, password FROM admin WHERE email = %s",
+                "SELECT id, email, password FROM admin WHERE email = %s",
                 (email,),
             )
-            return cur.fetchone()
+            row = cur.fetchone()
+            if row:
+                return AdminAuth(**row)
+            return None
 
-def get_admin_by_id(admin_id: int):
+def get_admin_by_id(admin_id: int) -> AdminRead | None:
     with get_db_connection() as conn:
-        with conn.cursor() as cur:
+        with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
                 "SELECT id, email FROM admin WHERE id = %s",
                 (admin_id,),
             )
-            return cur.fetchone()
+            row = cur.fetchone()
+            if row:
+                return AdminRead(**row)
+            return None
