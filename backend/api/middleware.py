@@ -12,6 +12,11 @@ async def count_requests_middleware(request: Request, call_next):
     endpoint = request.url.path
     method = request.method
 
+    if method == "DELETE":
+        endpoint = "/admin/user"
+    if method == "PATCH":
+        endpoint = "/admin/user"
+
     # Update database counter
     increment_endpoint_count(endpoint, method)
 
