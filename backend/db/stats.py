@@ -1,4 +1,5 @@
 from db.connection import get_db_connection
+from models.endpoint_access import EndpointStatRead
 import psycopg
 
 def increment_endpoint_count(endpoint: str, method: str):
@@ -15,13 +16,10 @@ def increment_endpoint_count(endpoint: str, method: str):
             )
             conn.commit()
 
-def get_endpoint_stats(endpoint: str, method: str):
+def get_endpoint_stats() -> list[EndpointStatRead]:
+    """Return all endpoint access stats as Pydantic models."""
     with get_db_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(
-                """
-                SELECT * FROM endpoint_access
-                """,
-                (endpoint, method),
-            )
-            cur.fetchall()
+            cur.execute("SELECT id, endpoint, requests, method FROM endpoint_access")
+            rows = cur.fetchall()
+            return [EndpointStatRead(**row) for row in rows]

@@ -73,11 +73,9 @@ def logout_admin(response: Response):
 def get_all_users_endpoint(admin_id: int = Depends(get_current_admin)):
     """Get all users and their remaining API requests (admin only)"""
     users = get_all_users()
-    return [
-        UserRead(**user)
-        for user in users
-    ]
+    return users
 
 @router.get("/endpoint_access", response_model=List[EndpointStatRead])
 def get_all_endpoint_data(admin_id: int = Depends(get_current_admin)):
     stats = get_endpoint_stats()
+    return stats
