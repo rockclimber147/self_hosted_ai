@@ -18,6 +18,7 @@
             <th></th>
             <th></th>
             <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody id="userTableBody">
@@ -42,7 +43,15 @@
     </div>
     <button id="logoutBtn"></button>
   </div>
-
+  <div id="confirmationModal" class="modal">
+    <div class="modal-content">
+      <p>Are you sure you want to delete the user: <strong id="userNameToDelete"></strong>?</p>
+      <div class="modal-buttons">
+        <button id="confirmDeleteBtn">Yes, Delete</button>
+        <button id="cancelDeleteBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
   <script type="module" src="scripts/admin_landing.js"></script>
 </body>
 </html>
