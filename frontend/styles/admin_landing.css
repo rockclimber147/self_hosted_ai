@@ -1,67 +1,67 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f7f9fc;
-    margin: 0;
-    padding: 0;
-  }
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f7f9fc;
+  margin: 0;
+  padding: 0;
+}
   
-  .container {
-    max-width: 1100px;
-    margin: 3rem auto;
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
+.container {
+  max-width: 1100px;
+  margin: 3rem auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
   
-  h1 {
-    color: #333;
-  }
-  
-  h2 {
-    margin-top: 2rem;
-    color: #555;
-  }
-  
-  #userTable, #endpointTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-  }
-  
-  #userTable th, #userTable td, #endpointTable th, #endpointTable td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    word-break: break-all;
-    white-space: normal;
-    max-width: 300px;
-    overflow-x: auto;
-  }
-  
-  #userTable th, #endpointTable th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-  }
-  
-  #userTable tr:nth-child(even), #endpointTable tr:nth-child(even) {
-    background-color: #fafafa;
-  }
+h1 {
+  color: #333;
+}
 
-  #logoutBtn {
-    margin-top: 4rem;
-    padding: 0.8rem;
-    background-color: #ffe6e6;
-    color: #d63031;
-    border: 1px solid #ff7675;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-  }
+h2 {
+  margin-top: 2rem;
+  color: #555;
+}
+
+#userTable, #endpointTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+#userTable th, #userTable td, #endpointTable th, #endpointTable td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  word-break: break-all;
+  white-space: normal;
+  max-width: 300px;
+  overflow-x: auto;
+}
+
+#userTable th, #endpointTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+#userTable tr:nth-child(even), #endpointTable tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+#logoutBtn {
+  margin-top: 4rem;
+  padding: 0.8rem;
+  background-color: #ffe6e6;
+  color: #d63031;
+  border: 1px solid #ff7675;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+}
 
   /* Mobile responsive */
-  @media (max-width: 600px) {
+@media (max-width: 600px) {
   #logoutBtn {
     margin-top: 2rem;
     padding: 1rem;
@@ -69,4 +69,62 @@ body {
     width: 100%;
     border-radius: 8px;
   }
+}
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
+    max-width: 400px;
+    border-radius: 8px;
+    text-align: center;
+}
+.modal-buttons button {
+    margin: 0.5rem;
+    padding: 0.5rem;
+    background-color: rgba(229, 229, 229, 0.824);
+    color: #545353;
+    border: 1px solid;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;  
+}
+
+.update-btn {
+    margin: 0.25rem;
+    padding: 0.5rem;
+    background-color: #e6f0ff;
+    color:rgb(27, 84, 255);
+    border: 1px solid rgb(27, 84, 255);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.delete-btn {
+    margin: 0.5rem;
+    padding: 0.5rem;
+    background-color: #ffe6e6;
+    color: #d63031;
+    border: 1px solid #ff7675;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
 }
