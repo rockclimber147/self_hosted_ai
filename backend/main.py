@@ -36,7 +36,7 @@ async def all_exceptions_handler(request: Request, exc: Exception):
         content={"error": str(exc), "type": str(type(exc))}
     )
 
-origins = ["http://127.0.0.1:5500", "http://localhost:5500"]
+origins = ["http://127.0.0.1:5500", "http://localhost:5500", "https://rockclimber147.github.io"]
 
 app.add_middleware(
     CORSMiddleware,

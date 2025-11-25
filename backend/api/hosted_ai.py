@@ -21,7 +21,7 @@ async def summarize_video(request: Request, file: UploadFile = File(...), user_i
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
-    api_requests_left = user[2]  # api_requests_left is the third column
+    api_requests_left = user.api_requests_left  # api_requests_left is the third column
     warning = None
     if api_requests_left <= 0:
         warning = "You have exceeded your free API requests. You may still use the service, but future limits may apply."
@@ -48,6 +48,4 @@ async def summarize_video(request: Request, file: UploadFile = File(...), user_i
     response = {"summary": summary}
     if warning:
         response["warning"] = warning
-    print("Summary: ", summary)
-    print("Response: ", response)
     return response
