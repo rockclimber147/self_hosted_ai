@@ -3,6 +3,7 @@ from psycopg.rows import dict_row
 from db.connection import get_db_connection
 from models.user import UserRead, UserAuth
 
+
 def insert_user(email: str, hashed_password: str) -> UserRead | None:
     try:
         with get_db_connection() as conn:
@@ -22,6 +23,7 @@ def insert_user(email: str, hashed_password: str) -> UserRead | None:
     except psycopg.errors.UniqueViolation:
         return None
 
+
 def get_user_by_email(email: str) -> UserAuth | None:
     with get_db_connection() as conn:
         with conn.cursor(row_factory=dict_row) as cur:
@@ -33,6 +35,7 @@ def get_user_by_email(email: str) -> UserAuth | None:
             if row:
                 return UserAuth(**row)
             return None
+
 
 def get_user_by_id(user_id: int) -> UserRead | None:
     with get_db_connection() as conn:
@@ -46,6 +49,7 @@ def get_user_by_id(user_id: int) -> UserRead | None:
                 return UserRead(**row)
             return None
 
+
 def update_user_api_requests_left(user_id: int, amount: int) -> None:
     with get_db_connection() as conn:
         with conn.cursor() as cur:
@@ -55,14 +59,14 @@ def update_user_api_requests_left(user_id: int, amount: int) -> None:
             )
             conn.commit()
 
+
 def get_all_users() -> list[UserRead]:
     with get_db_connection() as conn:
         with conn.cursor(row_factory=dict_row) as cur:
-            cur.execute(
-                'SELECT * FROM "user" ORDER BY id'
-            )
+            cur.execute('SELECT * FROM "user" ORDER BY id')
             rows = cur.fetchall()
             return [UserRead(**row) for row in rows]
+
 
 def increment_user_total_api_calls(user_id: int):
     with get_db_connection() as conn:
@@ -76,6 +80,7 @@ def increment_user_total_api_calls(user_id: int):
                 (user_id,),
             )
             conn.commit()
+
 
 def set_user_last_jwt(user_id: int, last_jwt: str):
     with get_db_connection() as conn:
@@ -91,3 +96,42 @@ def set_user_last_jwt(user_id: int, last_jwt: str):
             conn.commit()
 
 
+def delete_user_by_id(user_id: int):
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                DELETE FROM "user"
+                WHERE id = %s
+                """,
+                (user_id,),
+            )
+            affected = cur.rowcount
+        conn.commit()
+    return affected > 0
+
+
+def update_user_requests_remaining(user_id: int, requests_remaining: int):
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                UPDATE "user"
+                SET api_requests_left = %s
+                WHERE id = %s
+                RETURNING id, email, api_requests_left;
+                """,
+                (requests_remaining, user_id),
+            )
+            row = cur.fetchone()
+            conn.commit()
+
+            if row is None:
+                return None
+            updated_user = {
+                "id": row["id"],
+                "username": row["email"],
+                "api_requests_left": row["api_requests_left"],
+            }
+
+            return updated_user

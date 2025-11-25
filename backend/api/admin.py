@@ -10,6 +10,7 @@ from db.stats import get_endpoint_stats
 from models.admin import AdminCreate, AdminLogin, AdminRead, AdminAuth
 from models.user import UserRead
 from models.endpoint_access import EndpointStatRead
+from db.user import get_user_by_id, update_user_requests_remaining, delete_user_by_id
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -75,7 +76,36 @@ def get_all_users_endpoint(admin_id: int = Depends(get_current_admin)):
     users = get_all_users()
     return users
 
+
 @router.get("/endpoint_access", response_model=List[EndpointStatRead])
 def get_all_endpoint_data(admin_id: int = Depends(get_current_admin)):
     stats = get_endpoint_stats()
     return stats
+
+
+@router.delete("/user/{user_id}", response_model=dict)
+def delete_user(user_id: int, admin_id: int = Depends(get_current_admin)):
+    user = get_user_by_id(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    success = delete_user_by_id(user_id)
+
+    if not success:
+        raise HTTPException(status_code=500, detail="Failed to delete user")
+
+    return {"message": f"User {user_id} deleted successfully"}
+
+
+@router.patch("/user/{user_id}/requests")
+def update_user_requests_endpoint(
+    user_id: int, requests_remaining: int, admin_id: int = Depends(get_current_admin)
+):
+    user = get_user_by_id(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    updated_user = update_user_requests_remaining(user_id, requests_remaining)
+    if not updated_user:
+        raise HTTPException(status_code=500, detail="Failed to update user")
+    return updated_user
