@@ -7,7 +7,7 @@ from auth.dependencies import get_current_admin
 from db.admin import get_admin_by_email, get_admin_by_id, insert_admin
 from db.user import get_all_users
 from db.stats import get_endpoint_stats
-from models.admin import AdminCreate, AdminLogin, AdminRead
+from models.admin import AdminCreate, AdminLogin, AdminRead, AdminAuth
 from models.user import UserRead
 from models.endpoint_access import EndpointStatRead
 
@@ -21,10 +21,10 @@ def test():
 
 @router.get("/get_admin_info")
 def get_admin_info(admin_id: int = Depends(get_current_admin)):
-    admin = get_admin_by_id(admin_id)
+    admin: AdminRead = get_admin_by_id(admin_id)
     if not admin:
         raise HTTPException(status_code=404, detail="Admin not found")
-    return AdminRead(**admin)
+    return admin
 
 
 @router.post(
@@ -38,22 +38,22 @@ def create_admin(admin: AdminCreate, response: Response):
     if not new_admin:
         raise HTTPException(status_code=400, detail="Admin already exists")
 
-    admin_id = new_admin["id"]
+    admin_id = new_admin.id
     token = create_jwt(admin_id, role="admin")
     response.set_cookie(
         key="access_token", value=token, httponly=True, secure=True, samesite="None"
     )
 
-    return AdminRead(**new_admin)
+    return AdminRead(new_admin.id, new_admin.email)
 
 
 @router.post("/login")
 def login_admin(admin: AdminLogin, response: Response):
     row = get_admin_by_email(admin.email)
-    if not row or not verify_password(admin.password, row["password"]):
+    if not row or not verify_password(admin.password, row.password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    admin_id = row["id"]
+    admin_id = row.id
     token = create_jwt(admin_id, role="admin")
     response.set_cookie(
         key="access_token", value=token, httponly=True, secure=True, samesite="None"
