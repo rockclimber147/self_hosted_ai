@@ -24,6 +24,8 @@ export const DOM_MESSAGES = {
         "h2": "User Activity Overview",
         "colUserName": "User Name",
         "colRemainingApiRequests": "Remaining API Requests",
+        "colConsumedApiRequests": "Total API Calls",
+        "colLastJwt": "Last JWT",
         "loading": "Loading users...",
         "logoutButton": "Logout",
         "fetchError": "Failed to fetch user list",

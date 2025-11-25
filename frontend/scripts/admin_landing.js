@@ -32,7 +32,9 @@ async function loadUsers() {
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${user.email}</td>
+        <td>${user.last_jwt}</td>
         <td>${user.api_requests_left}</td>
+        <td>${user.total_api_calls}</td>
       `;
       tableBody.appendChild(row);
     });
@@ -48,25 +50,19 @@ async function loadEndpoints() {
   tableBody.innerHTML = `<tr><td colspan="3">${t.loadingEndpoint}</td></tr>`;
 
   try {
-    // const response = await fetch(`${BACKEND_URL}/admin/endpoints`, {
-    //   method: "GET",
-    //   credentials: "include",
-    // });
-    const response = [  // TODO: remove mock data and handle 404
-        { "method": "GET", "endpoint": "/user/get_user_info", "requests": 120 },
-        { "method": "POST", "endpoint": "/ai/summarize", "requests": 50 },
-        { "method": "POST", "endpoint": "/user/logout", "requests": 80 }
-      ]
+    const response = await fetch(`${BACKEND_URL}/admin/endpoint_access`, {
+      method: "GET",
+      credentials: "include",
+    });
 
     if (response.status === 401) {
       window.location.href = "admin_login.html";
       return;
     }
 
-    // if (!response.ok) throw new Error(t.fetchError);  // TODO: uncomment
+    if (!response.ok) throw new Error(t.fetchError);
 
-    // const endpoints = await response.json();
-    const endpoints = response; // TODO: use the line above
+    const endpoints = await response.json();
     tableBody.innerHTML = "";
 
     if (endpoints.length === 0) {
@@ -106,7 +102,9 @@ function loadStaticText() {
   const headers = document.querySelectorAll("#userTable thead th");
   if (headers.length >= 2) {
     headers[0].textContent = t.colUserName;
-    headers[1].textContent = t.colRemainingApiRequests;
+    headers[1].textContent = t.colLastJwt;
+    headers[2].textContent = t.colRemainingApiRequests;
+    headers[3].textContent = t.colConsumedApiRequests;
   }
 
   document.getElementById("logoutBtn").textContent = t.logoutButton;
