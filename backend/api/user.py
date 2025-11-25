@@ -3,7 +3,7 @@ from auth.security import hash_password, verify_password
 from auth.jwt_handler import create_jwt
 from auth.dependencies import get_current_user
 from models.user import UserCreate, UserLogin, UserRead
-from db.user import get_user_by_id, insert_user, get_user_by_email
+from db.user import get_user_by_id, insert_user, get_user_by_email, set_user_last_jwt
 
 router = APIRouter(prefix="/user", tags=["user"])
 
@@ -44,6 +44,7 @@ def login_user(user: UserLogin, response: Response):
 
     user_id = row.id
     token = create_jwt(user_id, role="user")
+    set_user_last_jwt(user_id, token)
     response.set_cookie(
         key="access_token", value=token, httponly=True, secure=True, samesite="None"
     )

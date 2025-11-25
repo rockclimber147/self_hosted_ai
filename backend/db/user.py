@@ -63,3 +63,31 @@ def get_all_users() -> list[UserRead]:
             )
             rows = cur.fetchall()
             return [UserRead(**row) for row in rows]
+
+def increment_user_total_api_calls(user_id: int):
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                UPDATE "user"
+                SET total_api_calls = total_api_calls + 1
+                WHERE id = %s
+                """,
+                (user_id,),
+            )
+            conn.commit()
+
+def set_user_last_jwt(user_id: int, last_jwt: str):
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                UPDATE "user"
+                SET last_jwt = %s
+                WHERE id = %s
+                """,
+                (last_jwt, user_id),
+            )
+            conn.commit()
+
+
