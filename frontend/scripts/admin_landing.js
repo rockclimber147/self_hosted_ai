@@ -93,7 +93,7 @@ async function updateApiRequests(userId, userEmail) {
 
 async function loadUsers() {
   const tableBody = document.getElementById("userTableBody");
-  tableBody.innerHTML = `<tr><td colspan="2">${t.loading}</td></tr>`;
+  tableBody.innerHTML = `<tr><td colspan="5">${t.loading}</td></tr>`;
 
   try {
     const response = await fetch(`${BACKEND_URL}/admin/users`, {
@@ -155,7 +155,7 @@ async function loadUsers() {
     });
   } catch (error) {
     tableBody.innerHTML = `
-      <tr><td colspan="2" style="color:red;">${t.loadingError}: ${error.message}</td></tr>
+      <tr><td colspan="5" style="color:red;">${t.loadingError}: ${error.message}</td></tr>
     `;
   }
 }
