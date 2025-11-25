@@ -20,6 +20,6 @@ def get_endpoint_stats() -> list[EndpointStatRead]:
     """Return all endpoint access stats as Pydantic models."""
     with get_db_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT id, endpoint, requests, method FROM endpoint_access")
+            cur.execute("SELECT id, endpoint, requests, method FROM endpoint_access ORDER BY endpoint DESC")
             rows = cur.fetchall()
             return [EndpointStatRead(**row) for row in rows]
